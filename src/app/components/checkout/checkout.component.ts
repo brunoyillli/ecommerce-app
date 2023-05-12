@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
 import { BrunoShopFormService } from 'src/app/services/bruno-shop-form.service';
+import { CartService } from 'src/app/services/cart.service';
 import { BrunoShopValidators } from 'src/app/validators/bruno-shop-validators';
 
 @Component({
@@ -24,9 +25,13 @@ export class CheckoutComponent implements OnInit {
   shippingAddressStates: State[] = [];
   billingAddressStates: State[] = [];
 
-  constructor(private formBuilder: FormBuilder, private brunoShopFormService: BrunoShopFormService) { }
+  constructor(private formBuilder: FormBuilder, private brunoShopFormService: BrunoShopFormService,
+    private cartService: CartService) { }
 
   ngOnInit(): void {
+
+    this.reviewCartDetails();
+
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: new FormControl('', [
@@ -161,38 +166,48 @@ export class CheckoutComponent implements OnInit {
     );
   }
 
-  get firstName() {return this.checkoutFormGroup.get('customer.firstName');}
+  reviewCartDetails() {
+    this.cartService.totalQuantity.subscribe(
+     totalQuantity => this.totalQuantity = totalQuantity
+    );
 
-  get lastName() {return this.checkoutFormGroup.get('customer.lastName');}
+    this.cartService.totalPrice.subscribe(
+      totalPrice => this.totalPrice = totalPrice
+    );
+  }
 
-  get email() {return this.checkoutFormGroup.get('customer.email');}
+  get firstName() { return this.checkoutFormGroup.get('customer.firstName'); }
 
-  get shippingAddressStreet() {return this.checkoutFormGroup.get('shippingAddress.street');}
+  get lastName() { return this.checkoutFormGroup.get('customer.lastName'); }
 
-  get shippingAddressCity() {return this.checkoutFormGroup.get('shippingAddress.city');}
+  get email() { return this.checkoutFormGroup.get('customer.email'); }
 
-  get shippingAddressState() {return this.checkoutFormGroup.get('shippingAddress.state');}
+  get shippingAddressStreet() { return this.checkoutFormGroup.get('shippingAddress.street'); }
 
-  get shippingAddressZipCode() {return this.checkoutFormGroup.get('shippingAddress.zipCode');}
+  get shippingAddressCity() { return this.checkoutFormGroup.get('shippingAddress.city'); }
 
-  get shippingAddressCountry() {return this.checkoutFormGroup.get('shippingAddress.country');}
+  get shippingAddressState() { return this.checkoutFormGroup.get('shippingAddress.state'); }
 
-  get billingAddressStreet() {return this.checkoutFormGroup.get('billingAddress.street');}
+  get shippingAddressZipCode() { return this.checkoutFormGroup.get('shippingAddress.zipCode'); }
 
-  get billingAddressCity() {return this.checkoutFormGroup.get('billingAddress.city');}
+  get shippingAddressCountry() { return this.checkoutFormGroup.get('shippingAddress.country'); }
 
-  get billingAddressState() {return this.checkoutFormGroup.get('billingAddress.state');}
+  get billingAddressStreet() { return this.checkoutFormGroup.get('billingAddress.street'); }
 
-  get billingAddressZipCode() {return this.checkoutFormGroup.get('billingAddress.zipCode');}
+  get billingAddressCity() { return this.checkoutFormGroup.get('billingAddress.city'); }
 
-  get billingAddressCountry() {return this.checkoutFormGroup.get('billingAddress.country');}
+  get billingAddressState() { return this.checkoutFormGroup.get('billingAddress.state'); }
 
-  get creditCardType() {return this.checkoutFormGroup.get('creditCard.cardType');}
+  get billingAddressZipCode() { return this.checkoutFormGroup.get('billingAddress.zipCode'); }
 
-  get creditCardNameOnCard() {return this.checkoutFormGroup.get('creditCard.nameOnCard');}
+  get billingAddressCountry() { return this.checkoutFormGroup.get('billingAddress.country'); }
 
-  get creditCardNumber() {return this.checkoutFormGroup.get('creditCard.cardNumber');}
+  get creditCardType() { return this.checkoutFormGroup.get('creditCard.cardType'); }
 
-  get creditCardSecurityCode() {return this.checkoutFormGroup.get('creditCard.securityCode');}
+  get creditCardNameOnCard() { return this.checkoutFormGroup.get('creditCard.nameOnCard'); }
+
+  get creditCardNumber() { return this.checkoutFormGroup.get('creditCard.cardNumber'); }
+
+  get creditCardSecurityCode() { return this.checkoutFormGroup.get('creditCard.securityCode'); }
 
 }
